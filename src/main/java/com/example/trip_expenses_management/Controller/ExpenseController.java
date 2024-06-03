@@ -1,0 +1,38 @@
+package com.example.trip_expenses_management.Controller;
+
+import com.example.trip_expenses_management.entity.Expense;
+import com.example.trip_expenses_management.service.ExpenseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/expenses")
+public class ExpenseController {
+
+    @Autowired
+    private ExpenseService expenseService;
+
+    @GetMapping
+    public ResponseEntity<List<Expense>> getAllExpenses() {
+        return ResponseEntity.ok(expenseService.findAll());
+    }
+
+    @PostMapping
+    public ResponseEntity<Expense> createExpense(@RequestBody Expense expense) {
+        return ResponseEntity.ok(expenseService.save(expense));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Expense> updateExpense(@PathVariable Long id, @RequestBody Expense expenseDetails) {
+        return ResponseEntity.ok(expenseService.update(id, expenseDetails));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
+        expenseService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}
